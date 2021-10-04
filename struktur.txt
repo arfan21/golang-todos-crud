@@ -1,0 +1,17 @@
+struktur response
+{
+    "status" : "success",
+    "message" : "success",
+    "data" : ....
+}
+{
+	"status" : "error",
+	"message" : "error",
+	"data" : ....
+}
+
+struktur model todo  
+{
+    "id" : 1,
+    "name" : "name todo"
+}
