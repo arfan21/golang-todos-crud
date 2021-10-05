@@ -2,15 +2,15 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/arfan21/golang-todos-crud/database"
 	"github.com/arfan21/golang-todos-crud/helper"
 	"github.com/arfan21/golang-todos-crud/model"
 )
-
-var res map[string]interface{}
 
 type Controller struct {
 	listTodos *database.ListTodos
@@ -46,7 +46,98 @@ func (c *Controller) CreateTodo(w http.ResponseWriter, r *http.Request) {
 	createdTodo := c.listTodos.Add(*todo)
 	helper.Response(w, helper.BaseResponse{Status: http.StatusOK, Message: "success create data", Data: createdTodo})
 }
-func (c *Controller) GetAllTodos(w http.ResponseWriter, r *http.Request)    {}
-func (c *Controller) GetTodoById(w http.ResponseWriter, r *http.Request)    {}
-func (c *Controller) UpdateTodoById(w http.ResponseWriter, r *http.Request) {}
+func (c *Controller) GetAllTodos(w http.ResponseWriter, r *http.Request) {}
+
+// GetTodoById
+// @Tags Todos
+// @Summary get a todo for a given todo id.
+// @Description get a todo with id from the database
+// @Accept json
+// @Produce json
+// @Param ID path int true "ID of the todo"
+// @Success 200 {object} helper.BaseResponse{data=model.Todo}
+// @Failure 400 {object} helper.BaseResponse{}
+// @Router /todos/{id} [GET]
+func (c *Controller) GetTodoById(w http.ResponseWriter, r *http.Request) {
+
+	// handling path ID
+	vars := mux.Vars(r)
+	todoID, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		response := helper.BaseResponse{
+			Status:  http.StatusBadRequest,
+			Message: err.Error(),
+			Data:    nil,
+		}
+		helper.Response(w, response)
+		return
+	}
+
+	resultTodo, err := c.listTodos.GetTodoById(todoID)
+	if err != nil {
+		response := helper.BaseResponse{
+			Status:  http.StatusOK,
+			Message: err.Error(),
+			Data:    nil,
+		}
+		helper.Response(w, response)
+		return
+	}
+
+	response := helper.BaseResponse{
+		Status:  http.StatusOK,
+		Message: "success",
+		Data:    resultTodo,
+	}
+	helper.Response(w, response)
+	return
+}
+
+// UpdateTodoById
+// @Tags Todos
+// @Summary Update todo with given todo id.
+// @Description Update the todo corresponding to the input id
+// @Accept json
+// @Produce json
+// @Param todo body model.TodoRequest true "update"
+// @Param ID path int true "ID of the todo"
+// @Success 200 {object} helper.BaseResponse{data=model.Todo}
+// @Failure 400 {object} helper.BaseResponse{}
+// @Router /todos/{id} [PUT]
+func (c *Controller) UpdateTodoById(w http.ResponseWriter, r *http.Request) {
+
+	// handling path ID
+	vars := mux.Vars(r)
+	todoID, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		helper.Response(w, helper.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: nil})
+		return
+	}
+
+	// read body request
+	readBody, errRead := ioutil.ReadAll(r.Body)
+	if errRead != nil {
+		helper.Response(w, helper.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: nil})
+		return
+	}
+	var todo model.Todo
+	// unmarshal to struct
+	errMarshal := json.Unmarshal(readBody, &todo)
+
+	if errMarshal != nil {
+		helper.Response(w, helper.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: nil})
+		return
+	}
+	// call database function update
+	todo.ID = todoID
+	err = c.listTodos.UpdateTodoById(todo)
+	if err != nil {
+		helper.Response(w, helper.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: nil})
+		return
+	}
+
+	// success
+	helper.Response(w, helper.BaseResponse{Status: http.StatusOK, Message: "success update", Data: todo})
+	return
+}
 func (c *Controller) DeleteTodoById(w http.ResponseWriter, r *http.Request) {}

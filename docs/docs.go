@@ -78,13 +78,122 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/todos/{id}": {
+            "get": {
+                "description": "get a todo with id from the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "get a todo for a given todo id.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the todo",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/helper.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Todo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update the todo corresponding to the input id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "Update todo with given todo id.",
+                "parameters": [
+                    {
+                        "description": "update",
+                        "name": "todo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.TodoRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID of the todo",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/helper.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Todo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "helper.BaseResponse": {
             "type": "object",
             "properties": {
-                "data": {},
+                "data": {
+                    "type": "object"
+                },
                 "message": {
                     "type": "string"
                 },

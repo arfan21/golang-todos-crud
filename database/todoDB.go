@@ -24,11 +24,21 @@ func (l *ListTodos) GetAll() []model.Todo {
 	return l.List
 }
 
-func (l *ListTodos) GetByID(id int) (model.Todo, error) {
+func (l *ListTodos) GetTodoById(id int) (model.Todo, error) {
 	for _, val := range l.List {
 		if val.ID == id {
 			return val, nil
 		}
 	}
-	return model.Todo{}, errors.New("Not Found")
+	return model.Todo{}, errors.New("not found")
+}
+
+func (l *ListTodos) UpdateTodoById(todo model.Todo) error {
+	for idx, val := range l.List {
+		if val.ID == todo.ID {
+			l.List[idx].Name = todo.Name
+			return nil
+		}
+	}
+	return errors.New("id not found")
 }

@@ -14,6 +14,10 @@ func New(mux *mux.Router) {
 	ctrl := controller.New(&listTodos)
 
 	mux.HandleFunc("/todos", ctrl.CreateTodo).Methods("POST")
+	// Handle get todo by id
+	mux.HandleFunc("/todos/{id}", ctrl.GetTodoById).Methods("GET")
+	// Handle update todo by id
+	mux.HandleFunc("/todos/{id}", ctrl.UpdateTodoById).Methods("PUT")
 
 	// routing swagger API
 	mux.PathPrefix("/swagger/").Handler(httpSwagger.Handler(

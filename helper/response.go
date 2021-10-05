@@ -12,6 +12,7 @@ type BaseResponse struct {
 }
 
 func Response(w http.ResponseWriter, data BaseResponse) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(data.Status)
 	dataJson, _ := json.Marshal(data)
