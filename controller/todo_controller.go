@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -18,7 +17,6 @@ type Controller struct {
 }
 
 func New(listTodos *database.ListTodos) *Controller {
-	fmt.Println(listTodos)
 	return &Controller{listTodos}
 }
 
