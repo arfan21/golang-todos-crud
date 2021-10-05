@@ -5,8 +5,15 @@ import (
 	"net/http"
 )
 
-func Response(w http.ResponseWriter, data interface{}) {
+type BaseResponse struct {
+	Status  int         `json:"status"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
+func Response(w http.ResponseWriter, data BaseResponse) {
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(data.Status)
 	dataJson, _ := json.Marshal(data)
 	w.Write(dataJson)
 }

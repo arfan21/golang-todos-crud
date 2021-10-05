@@ -1,0 +1,67 @@
+basePath: /
+definitions:
+  helper.BaseResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  model.Todo:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Todos API
+        type: string
+    type: object
+  model.TodoRequest:
+    properties:
+      name:
+        example: Todos API
+        type: string
+    type: object
+host: http://localhost:8000
+info:
+  contact: {}
+  description: This is API for completing final project 1 hacktiv8
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Hacktiv8 TODOS API
+  version: "1.0"
+paths:
+  /todos:
+    post:
+      consumes:
+      - application/json
+      description: Create a new Todo
+      parameters:
+      - description: create a new todo
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/model.TodoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Todo'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseResponse'
+      summary: Create a new Todo to the database
+      tags:
+      - Todos
+swagger: "2.0"
