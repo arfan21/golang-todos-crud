@@ -2,10 +2,11 @@ package controller
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/mux"
 
 	"github.com/arfan21/golang-todos-crud/database"
 	"github.com/arfan21/golang-todos-crud/helper"
@@ -46,7 +47,27 @@ func (c *Controller) CreateTodo(w http.ResponseWriter, r *http.Request) {
 	createdTodo := c.listTodos.Add(*todo)
 	helper.Response(w, helper.BaseResponse{Status: http.StatusOK, Message: "success create data", Data: createdTodo})
 }
-func (c *Controller) GetAllTodos(w http.ResponseWriter, r *http.Request) {}
+
+// GetAllTodos
+// @Tags Todos
+// @Summary get all todos .
+// @Description get all todso from the database
+// @Accept json
+// @Produce json
+// @Success 200 {object} helper.BaseResponse{data=[]model.Todo}
+// @Failure 400 {object} helper.BaseResponse{}
+// @Router /todos [GET]
+func (c *Controller) GetAllTodos(w http.ResponseWriter, r *http.Request) {
+
+	resultTodo := c.listTodos.GetAll()
+
+	respon := helper.BaseResponse{
+		Status:  http.StatusOK,
+		Message: "success get all data",
+		Data:    resultTodo,
+	}
+	helper.Response(w, respon)
+}
 
 // GetTodoById
 // @Tags Todos
@@ -90,7 +111,6 @@ func (c *Controller) GetTodoById(w http.ResponseWriter, r *http.Request) {
 		Data:    resultTodo,
 	}
 	helper.Response(w, response)
-	return
 }
 
 // UpdateTodoById
@@ -136,8 +156,7 @@ func (c *Controller) UpdateTodoById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// success
+	// successreturn
 	helper.Response(w, helper.BaseResponse{Status: http.StatusOK, Message: "success update", Data: todo})
-	return
 }
 func (c *Controller) DeleteTodoById(w http.ResponseWriter, r *http.Request) {}

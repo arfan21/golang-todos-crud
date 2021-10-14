@@ -2,8 +2,7 @@ basePath: /
 definitions:
   helper.BaseResponse:
     properties:
-      data:
-        type: object
+      data: {}
       message:
         type: string
       status:
@@ -35,6 +34,31 @@ info:
   version: "1.0"
 paths:
   /todos:
+    get:
+      consumes:
+      - application/json
+      description: get all todso from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Todo'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseResponse'
+      summary: get all todos .
+      tags:
+      - Todos
     post:
       consumes:
       - application/json
