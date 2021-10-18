@@ -21,6 +21,8 @@ func New(mux *mux.Router) {
 	// Handle update todo by id
 	mux.HandleFunc("/todos/{id}", ctrl.UpdateTodoById).Methods("PUT")
 
+	mux.HandleFunc("/todos/{id}", ctrl.DeleteTodoById).Methods("DELETE")
+
 	// routing swagger API
 	mux.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8000/swagger/doc.json"), //The url pointing to API definition

@@ -42,3 +42,25 @@ func (l *ListTodos) UpdateTodoById(todo model.Todo) error {
 	}
 	return errors.New("id not found")
 }
+
+func (l *ListTodos) DeleteTodoById(id int) error {
+	var index *int
+	for i, val := range l.List {
+		if val.ID == id {
+			index = &i
+			break
+		} else {
+			index = nil
+		}
+	}
+
+	if index == nil {
+		return errors.New("id not found")
+	}
+
+	l.List[*index] = l.List[len(l.List)-1]
+	l.List[len(l.List)-1] = model.Todo{}
+	l.List = l.List[:len(l.List)-1]
+
+	return nil
+}
