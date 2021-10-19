@@ -90,6 +90,30 @@ paths:
       tags:
       - Todos
   /todos/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete the todo corresponding to the input id
+      parameters:
+      - description: ID of the todo
+        in: path
+        name: ID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseResponse'
+      summary: delete todo with given todo id.
+      tags:
+      - Todos
     get:
       consumes:
       - application/json

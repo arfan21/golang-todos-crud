@@ -159,4 +159,32 @@ func (c *Controller) UpdateTodoById(w http.ResponseWriter, r *http.Request) {
 	// successreturn
 	helper.Response(w, helper.BaseResponse{Status: http.StatusOK, Message: "success update", Data: todo})
 }
-func (c *Controller) DeleteTodoById(w http.ResponseWriter, r *http.Request) {}
+
+// DeleteTodoById
+// @Tags Todos
+// @Summary delete todo with given todo id.
+// @Description delete the todo corresponding to the input id
+// @Accept json
+// @Produce json
+// @Param ID path int true "ID of the todo"
+// @Success 200 {object} helper.BaseResponse{}
+// @Failure 400 {object} helper.BaseResponse{}
+// @Router /todos/{id} [DELETE]
+func (c *Controller) DeleteTodoById(w http.ResponseWriter, r *http.Request) {
+
+	// handling path ID
+	vars := mux.Vars(r)
+	todoID, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		helper.Response(w, helper.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: nil})
+		return
+	}
+
+	err = c.listTodos.DeleteTodoById(todoID)
+	if err != nil {
+		helper.Response(w, helper.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: nil})
+	}
+
+	// success
+	helper.Response(w, helper.BaseResponse{Status: http.StatusOK, Message: "success Delete", Data: nil})
+}

@@ -212,6 +212,42 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "delete the todo corresponding to the input id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "delete todo with given todo id.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the todo",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseResponse"
+                        }
+                    }
+                }
             }
         }
     },
