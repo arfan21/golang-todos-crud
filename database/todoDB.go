@@ -13,7 +13,7 @@ type ListTodos struct {
 func (l *ListTodos) Add(todo model.Todo) model.Todo {
 	id := 1
 	if len(l.List) != 0 {
-		id = l.List[len(l.List)-1].ID
+		id = l.List[len(l.List)-1].ID + 1
 	}
 	todo.ID = id
 	l.List = append(l.List, todo)

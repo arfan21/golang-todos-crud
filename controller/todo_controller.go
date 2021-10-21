@@ -142,9 +142,9 @@ func (c *Controller) UpdateTodoById(w http.ResponseWriter, r *http.Request) {
 	}
 	var todo model.Todo
 	// unmarshal to struct
-	errMarshal := json.Unmarshal(readBody, &todo)
+	err = json.Unmarshal(readBody, &todo)
 
-	if errMarshal != nil {
+	if err != nil {
 		helper.Response(w, helper.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: nil})
 		return
 	}
@@ -152,7 +152,7 @@ func (c *Controller) UpdateTodoById(w http.ResponseWriter, r *http.Request) {
 	todo.ID = todoID
 	err = c.listTodos.UpdateTodoById(todo)
 	if err != nil {
-		helper.Response(w, helper.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: nil})
+		helper.Response(w, helper.BaseResponse{Status: http.StatusNotFound, Message: err.Error(), Data: nil})
 		return
 	}
 
@@ -182,7 +182,8 @@ func (c *Controller) DeleteTodoById(w http.ResponseWriter, r *http.Request) {
 
 	err = c.listTodos.DeleteTodoById(todoID)
 	if err != nil {
-		helper.Response(w, helper.BaseResponse{Status: http.StatusBadRequest, Message: err.Error(), Data: nil})
+		helper.Response(w, helper.BaseResponse{Status: http.StatusNotFound, Message: err.Error(), Data: nil})
+		return
 	}
 
 	// success
