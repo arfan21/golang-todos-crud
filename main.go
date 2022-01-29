@@ -16,8 +16,8 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host http://localhost:8000
 // @BasePath /
+
 func main() {
 	mux := mux.NewRouter()
 	router.New(mux)
