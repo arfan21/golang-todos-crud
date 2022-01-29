@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/arfan21/golang-todos-crud/router"
 	"github.com/gorilla/mux"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 // @title Hacktiv8 TODOS API
@@ -20,6 +22,12 @@ func main() {
 	mux := mux.NewRouter()
 	router.New(mux)
 
-	fmt.Println("http listen on http://localhost:8000")
-	http.ListenAndServe(":8000", mux)
+	port := os.Getenv("PORT")
+
+	if len(port) == 0 {
+		port = "8000"
+	}
+
+	fmt.Println("http listen on http://localhost:" + port)
+	http.ListenAndServe(":"+port, mux)
 }
